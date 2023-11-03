@@ -180,78 +180,30 @@
       "Carbs": "0",
       "Category": "Meat, Poultry"
     },
-    {
-      "Food": "Clams",
-      "Measure": "3 oz.",
-      "Grams": "85",
-      "Calories": "87",
-      "Protein": "12",
-      "Fat": "1",
-      "SatFat": "0",
-      "Fiber": "0",
-      "Carbs": "2",
-      "Category": "Fish, Seafood"
-    },
-    {
-      "Food": "Cod",
-      "Measure": "3 1/2 oz.",
-      "Grams": "100",
-      "Calories": "170",
-      "Protein": "28",
-      "Fat": "5",
-      "SatFat": "0",
-      "Fiber": "0",
-      "Carbs": "0",
-      "Category": "Fish, Seafood"
-    },
-    {
-      "Food": "Crab meat",
-      "Measure": "3 oz.",
-      "Grams": "85",
-      "Calories": "90",
-      "Protein": "14",
-      "Fat": "2",
-      "SatFat": "0",
-      "Fiber": "0",
-      "Carbs": "1",
-      "Category": "Fish, Seafood"
-    },
-    {
-      "Food": "Fish sticks fried",
-      "Measure": "5",
-      "Grams": "112",
-      "Calories": "200",
-      "Protein": "19",
-      "Fat": "10",
-      "SatFat": "5",
-      "Fiber": "0",
-      "Carbs": "8",
-      "Category": "Fish, Seafood"
-    },
-    {
-      "Food": "Flounder",
-      "Measure": "3 1/2 oz.",
-      "Grams": "100",
-      "Calories": "200",
-      "Protein": "30",
-      "Fat": "8",
-      "SatFat": "0",
-      "Fiber": "0",
-      "Carbs": "0",
-      "Category": "Fish, Seafood"
-    },
-    {
-      "Food": "Haddock",
-      "Measure": "3 oz.",
-      "Grams": "85",
-      "Calories": "135",
-      "Protein": "16",
-      "Fat": "5",
-      "SatFat": "4",
-      "Fiber": "0",
-      "Carbs": "6",
-      "Category": "Fish, Seafood"
-    },
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+,
+,
+    ,
+    ,
+    ,
+    ,
     {
       "Food": "Halibut",
       "Measure": "3 1/2 oz.",

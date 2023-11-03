@@ -42,7 +42,18 @@ router.post("/add", async (req, res) => {
 
 router.put("/edit/:id", async (req, res) => {});
 // delete food
-router.get("/del/:id", async (req, res) => {});
+router.delete("/del/:id", async (req, res) => {
+  try {
+    const deleteFood= await Foods.findByIdAndDelete({_id:req.params.id})
+    if(!deleteFood){
+      return res.status(400).json({ message: "food not found"})
+    }
+    res.status(200).send({ message: "food deleted successfully"})
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({ error: "error on  server" });
+  }
+});
 export const foodRouter = router;
 
 // .send({message:"foods data successfully found"})
