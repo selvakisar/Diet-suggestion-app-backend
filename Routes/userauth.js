@@ -93,7 +93,7 @@ router.post("/forgetpass",async(req, res)=>{
 
             }
         })
-        const resetLink = `http://netlify.app/?token=${resetToken}`;
+        const resetLink = `https://654d29dd9cf0020008b774b6--melodic-marigold-b38d5e.netlify.app/?token=${resetToken}`;
         const mailOptions ={
             from :process.env.EMAIL_ID,
             to:user.email,
