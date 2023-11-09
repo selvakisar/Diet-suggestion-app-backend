@@ -8,6 +8,7 @@ import mongoose from "mongoose";
 import { userRouter } from "./Routes/userauth.js";
 import { foodRouter } from "./Routes/foods.js";
 import { isAuthenticated } from "./Authentication/auth.js";
+import { planRouter } from "./Routes/plan.js";
 dotenv.config();
 const {URL,PORT}=process.env
 
@@ -37,6 +38,7 @@ app.use(express.json());
 
 app.use ("/api/user",userRouter);
 app.use("/api/foods",isAuthenticated,foodRouter)
+app.use("/api/plan",isAuthenticated,planRouter)
 // listen
 
 app.listen(PORT,()=>console.log(`server started on the${PORT}`));
