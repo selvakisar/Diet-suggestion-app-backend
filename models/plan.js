@@ -1,5 +1,4 @@
 import mongoose from 'mongoose';
-import { Foods } from './foods';
 
 const foodPlanSchema=new mongoose.Schema({
 foodplan:{
