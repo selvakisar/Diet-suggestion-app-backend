@@ -3,10 +3,10 @@ import   bcrypt from "bcrypt";
 import nodemailer from "nodemailer";
 import {User,generateToken} from "../models/usersM.js"
 const router=express.Router();
-
+const {EMAIL_ID,EMAIL_PASSWORD}=process.env
 
 // create user
-router.post("/signup", async (req, res)=>{
+router.post("/signup",async (req, res)=>{
    
 
     try {
@@ -66,55 +66,55 @@ res.status(200).send({message:"sucessfully loged in",token})
 
 
 
-// forgot password
-router.post("/forgetpass",async(req, res)=>{
+
+
+router.post("/forgetpass",async(req,res)=>{
     try {
-        // find by email 
-        const user=await User.findOne({email:req.body.email});
-        if(!user)
-        {
-            return res.status(404).send({error:"User not Exists"})
+        const {email}=req.body;
+
+        const user = await User.findOne({email})
+        if(!user){
+            res.status(404).json({message:"User not found"})
         }
 
-        // gen Token 
-        const resetToken =Math.random().toString(36).slice(2);
-        // Store the reset Token
+        const resetToken = Math.random().toString(36).substring(2,5);
+
+        const resetLink =
+        `https://654d29dd9cf0020008b774b6--melodic-marigold-b38d5e.netlify.app/${resetToken}`;
+
         user.resetToken=resetToken;
-        await user.save();
 
-        res.status(200).send({message:"reset Token saved successfully",resetToken})
+        const updatepassword = await User.findByIdAndUpdate(user._id,user);
+        if(updatepassword){
+            res.status(201).json({message:"  To update password  link sent to your email",resetToken,resetLink})
+        }
 
-        // sending link by email
-
-        const transport=nodemailer.createTransport({
-            service:"Gmail",auth:{
-                user:process.env.EMAIL_ID,
-                password:process.env.PASSWORD,
-
+        const transporter = nodemailer.createTransport({
+            host: "smtp.zoho.com",
+             port: 465, 
+             secure: true, // use SSL auth: { user: youremail@yourdomain.com, pass: yourpassword, }, })
+            secure: true, // use SSL
+            providerauth:{
+                user:"selvamern@zohomail.in",
+                pass:"923813114048@Mech",
             }
         })
-        const resetLink = `https://654d29dd9cf0020008b774b6--melodic-marigold-b38d5e.netlify.app/?token=${resetToken}`;
-        const mailOptions ={
-            from :process.env.EMAIL_ID,
-            to:user.email,
-            subject:"password reset" ,
-            text:`Click the link for your password reset: ${resetLink}`,
-        };
-
-        transport.sendMail(mailOptions,(error,info)=>{
-            if(error){
-                console.log("Error sending email:",error);
-                return res.status(500).send({error:"failed to send mail"})
-            }
-            console.log("email sent:",info.response);
-            res.status(200).send({message:"password reset email sent successfully"})
-        })
-    } 
-    catch (error) {
+        const sendMail=async () =>{
+            const info = await transporter.sendMail({
+                from:"selvamern@zohomail.in",
+                to:user.email,
+                subject:"reset password",
+                text:resetLink
+            })
+            console.log(`Mail successfully sent${info.messageId}`)
+        }
+        sendMail().catch(console.error)
+    } catch (error) {
         console.log(error);
         res.status(500).send({ error:"Internal Server Error"});
     }
 })
+
 
 
 //Route for reset password
@@ -152,6 +152,50 @@ export const userRouter= router;
 
 
 
+
+
+
+// module.exports.resetPassword = async (req, res) => {
+//     const { email } = req.body;
+//     const user = await UserModel.findOne({ email })
+//     if (!user) {
+//         res.status(404).json({ Message: "User not exist" })
+//     }
+//     const randomString =
+//         Math.random().toString(36).substring(2, 15) +
+//         Math.random().toString(36).substring(2, 15);
+
+//     const link = `https://lovely-figolla-4dd39a.netlify.app/passwordreset/${randomString}`;
+
+//     user.resettoken = randomString;
+//     const updated = await UserModel.findByIdAndUpdate(user._id, user);
+//     if (updated) {
+//         res.status(201).json({ Message: "Password reset link send to your mail id, Kindly check" })
+//     }
+//     //send an email to reset/particular user   
+
+//     const transporter = nodemailer.createTransport({
+//         service: "gmail",
+//         auth: {
+//             user: Email_Id,
+//             pass: Email_Pass
+//         }
+//     });
+
+//     const sendMail = async () => {
+//         const info = await transporter.sendMail({
+//             from: `"username " <${Email_Id}>`,
+//             to: user.email,
+//             subject: "Reset Password",
+//             text: link
+//         });
+//         console.log(`Mail set to ${info.messageId}`);
+//     };
+
+//     sendMail().catch(console.error);
+// }
+
+
 // router.post('/signup', async(req, res) => {
 //     const {name,email,password}=req.body;
 //     try{  
@@ -175,4 +219,72 @@ export const userRouter= router;
 //             res.status(500).json({message:"An error occurred"})
 //     }
 // }) ;
+
+
+
+
+
+// forgot password
+// router.post("/forgetpass",async(req, res)=>{
+//     try {
+//         find by email 
+//         const user=await User.findOne({email:req.body.email});
+//         if(!user)
+//         {
+//             return res.status(404).send({error:"User not Exists"})
+//         }
+
+//         gen Token 
+//         const resetToken =Math.random().toString(36).slice(2);
+//         Store the reset Token
+//         user.resetToken=resetToken;
+//         await user.save();
+
+//         res.status(200).send({message:"reset Token saved successfully",resetToken})
+
+//         sending link by email
+
+//         const transporter=nodemailer.createTransport({
+//             service:"gmail",
+          
+//             auth:{
+//                 user:EMAIL_ID,
+//                 password:EMAIL_PASSWORD,
+
+//             }
+           
+//         })
+//         verify connection configuration
+//         transporter.verify(function (error, success) {
+//         if (error) {
+//         console.log(error);
+//         } else {
+//         console.log(success + "Server is ready to take our messages");
+//         }
+//         });
+  
+//         const resetLink =
+//          `https://654d29dd9cf0020008b774b6--melodic-marigold-b38d5e.netlify.app/?token=${resetToken}`;
+        
+//          const mailOptions ={
+//             from :EMAIL_ID,
+//             to:user.email,
+//             subject:"password reset" ,
+//             text:`Click the link for your password reset: ${resetLink}`,
+//         };
+
+//         transporter.sendMail(mailOptions, function (error,info) {
+//             if(error){
+//                 console.log("Error sending email:",error);
+//                 return res.status(500).send({error:"failed to send mail"})
+//             }
+//             console.log("email sent:",info.response);
+//             res.status(200).send({message:"password reset email sent successfully"})
+//         })
+//     } 
+//     catch (error) {
+//         console.log(error);
+//         res.status(500).send({ error:"Internal Server Error"});
+//     }
+// })
 

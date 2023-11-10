@@ -1,9 +1,6 @@
 import express, { Router } from "express";
 import dotenv from "dotenv";
 import cors from "cors";
-
-import bodyParser from "body-parser";
-import {  dbConnect } from "./db.js";
 import mongoose from "mongoose";
 import { userRouter } from "./Routes/userauth.js";
 import { foodRouter } from "./Routes/foods.js";
