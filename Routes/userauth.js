@@ -2,9 +2,28 @@ import  express  from "express";
 import   bcrypt from "bcrypt"; 
 import nodemailer from "nodemailer";
 import {User,generateToken} from "../models/usersM.js"
+import dotenv from "dotenv"
+dotenv.config();
 const router=express.Router();
-const {EMAIL_ID,EMAIL_PASSWORD}=process.env
 
+
+import { google } from "googleapis";
+import { gmail } from "googleapis/build/src/apis/gmail/index.js";
+const OAuth2 = google.auth.OAuth2;
+
+const oauth2Client = new OAuth2(
+    "631662697401-e63rbh997maq5di47500rj4881u3qt9r.apps.googleusercontent.com",
+    "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",
+    "https://developers.google.com/oauthplayground" // Redirect URL
+        // process.env.CLIENT_ID,
+        // process.env.CLIENT_SECRET,
+        // process.env.REFRESH_TOKEN,
+    );
+oauth2Client.setCredentials({
+refresh_token: "1//0457nyUTF_M3bCgYIARAAGAQSNwF-L9IrDd1A9giWUwdeVaFnG0LLtx0dbJ6f9Zi7Z1uX19_afXGE5MOhztnjv2WD1XbBco2DPE8",
+});
+const accessToken = oauth2Client.getAccessToken()
+dotenv.config()
 // create user
 router.post("/signup",async (req, res)=>{
    
@@ -70,6 +89,7 @@ res.status(200).send({message:"sucessfully loged in",token})
 
 router.post("/forgetpass",async(req,res)=>{
     try {
+
         const {email}=req.body;
 
         const user = await User.findOne({email})
@@ -90,25 +110,50 @@ router.post("/forgetpass",async(req,res)=>{
         }
 
         const transporter = nodemailer.createTransport({
-            host: "smtp.zoho.com",
-             port: 465, 
-             secure: true, // use SSL auth: { user: youremail@yourdomain.com, pass: yourpassword, }, })
-            secure: true, // use SSL
-            providerauth:{
-                user:"selvamern@zohomail.in",
-                pass:"923813114048@Mech",
+            service:"gmail",
+           // use SSL
+            auth:{
+                type: "OAuth2",
+                user:process.env.EMAIL_ID,
+                pass:process.env.EMAIL_PASSWORD,
+                clientId:
+                 "631662697401-e63rbh997maq5di47500rj4881u3qt9r.apps.googleusercontent.com",
+          clientSecret:
+          "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",
+          refreshToken:
+          "1//0457nyUTF_M3bCgYIARAAGAQSNwF-L9IrDd1A9giWUwdeVaFnG0LLtx0dbJ6f9Zi7Z1uX19_afXGE5MOhztnjv2WD1XbBco2DPE8",
+                accessToken: accessToken
+        },
+        tls: {
+            rejectUnauthorized: false
+          }
+        })
+       
+
+        const mailOptions ={ 
+            from:process.env.EMAIL_ID,
+            to:user.email,
+            subject:"reset password",
+            text:resetLink
+        }
+        transporter.sendMail(mailOptions,function(error,info){
+            if(error){
+                console.log(error)
+            }else{
+                console.log('email sent :'+info.response)
             }
         })
-        const sendMail=async () =>{
-            const info = await transporter.sendMail({
-                from:"selvamern@zohomail.in",
-                to:user.email,
-                subject:"reset password",
-                text:resetLink
-            })
-            console.log(`Mail successfully sent${info.messageId}`)
-        }
-        sendMail().catch(console.error)
+        
+        // const sendMail=async () =>{
+        //     const info = await transporter.sendMail({
+        //         from:"selvamern@zohomail.in",
+        //         to:user.email,
+        //         subject:"reset password",
+        //         text:resetLink
+        //     })
+        //     console.log(`Mail successfully sent${info.messageId}`)
+        // }
+        // sendMail().catch(console.error)
     } catch (error) {
         console.log(error);
         res.status(500).send({ error:"Internal Server Error"});
