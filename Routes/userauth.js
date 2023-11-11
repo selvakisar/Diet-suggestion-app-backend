@@ -94,7 +94,7 @@ router.post("/forgetpass",async(req,res)=>{
 
         const user = await User.findOne({email})
         if(!user){
-            res.status(404).json({message:"User not found"})
+            res.status(404).send({message:"User not found"})
         }
 
         const resetToken = Math.random().toString(36).substring(2,5);
@@ -106,7 +106,7 @@ router.post("/forgetpass",async(req,res)=>{
 
         const updatepassword = await User.findByIdAndUpdate(user._id,user);
         if(updatepassword){
-            res.status(201).json({message:"  To update password  link sent to your email",resetToken,resetLink})
+            res.status(201).send({message:"  To update password  link sent to your email",resetToken,resetLink})
         }
 
         const transporter = nodemailer.createTransport({
@@ -173,7 +173,7 @@ router.post("/resetpass/:token",async(req,res)=>{
             return res.status(404).send({error:"invalid token"})
         }
         if(token!==user.resetToken){
-            return res.status(400).json({error:"cant find  token on server"})
+            return res.status(400).send({error:"cant find  token on server"})
         }
 
         // update password reset token
@@ -184,7 +184,7 @@ router.post("/resetpass/:token",async(req,res)=>{
 
         user.password = hashedPassword,
         await user.save();
-        res.status(200).json({ message: 'Password updated successfully'});
+        res.status(200).send({ message: 'Password updated successfully'});
     } catch (error) {
         
         //error handling
