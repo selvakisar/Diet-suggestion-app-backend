@@ -43,6 +43,7 @@ router.post("/signup",async (req, res)=>{
         // generate token and get response 
         const token = generateToken(user._id);
         res.status(201).send({message:"successfully created", token});
+        console.log(message)
     } catch (error) {
         // error handle
         console.log(error);

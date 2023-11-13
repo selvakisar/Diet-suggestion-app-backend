@@ -38,6 +38,24 @@ router.post("/add", async (req, res) => {
   }
 });
 
+
+
+router.post("/addmany", async (req, res) => {
+  try {
+    const food = await new Foods.insertMany({ ...req.body }).save();
+
+    if (!food) {
+      return res.status(400).json({ message: "Error in adding food" });
+    }
+    res.status(200).send({ message: "food Added successfully", data: food });
+  } catch (error) {
+    // error handle
+    console.log(error);
+    res.status(500).send({ error: "error on  server" });
+  }
+});
+
+
 // edit food
 
 router.put("/edit/:id", async (req, res) => {});
