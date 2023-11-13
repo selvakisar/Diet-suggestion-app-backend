@@ -5,7 +5,7 @@ import {User,generateToken} from "../models/usersM.js"
 import dotenv from "dotenv"
 dotenv.config();
 const router=express.Router();
-
+import http from "http";
 
 import { google } from "googleapis";
 import { gmail } from "googleapis/build/src/apis/gmail/index.js";
@@ -43,7 +43,7 @@ router.post("/signup",async (req, res)=>{
         // generate token and get response 
         const token = generateToken(user._id);
         res.status(201).send({message:"successfully created", token});
-        console.log(message)
+       
     } catch (error) {
         // error handle
         console.log(error);
