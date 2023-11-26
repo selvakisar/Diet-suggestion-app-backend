@@ -5,8 +5,7 @@ Foods:{
     type:mongoose.Schema.Types.ObjectId,
     ref:"Foods",
 },
-quantity:Number,
-default:1
+
 });
 
 
