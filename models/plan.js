@@ -6,7 +6,7 @@ Foods:{
     ref:"Foods",
 },
 quantity:Number,
-default:0
+default:1
 });
 
 
