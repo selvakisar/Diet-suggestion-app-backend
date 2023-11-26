@@ -1,21 +1,33 @@
 import mongoose from 'mongoose';
 
-const foodPlanSchema=new mongoose.Schema({
-foodplan:{
+const FoodItemSchema=new mongoose.Schema({
+Foods:{
     type:mongoose.Schema.Types.ObjectId,
     ref:"Foods",
 },
 quantity:Number,
+default:0
 });
 
-const  PlanSchema = new mongoose.Schema({
-    foodsplan:[foodPlanSchema],
+
+
+const FoodItem=mongoose.model("FoodItem",FoodItemSchema)
+
+
+const FoodPlanSchema=new mongoose.Schema({
+    items:[FoodItemSchema],
     user:{
         type:mongoose.Schema.Types.ObjectId,
-        ref:'User',
+        ref:"User",
+        required:true
     }
 })
 
-const Plan=mongoose.model("plan",PlanSchema)
+const FoodPlan = mongoose.model("FoodPlan",FoodPlanSchema) 
 
-export {Plan};
+
+
+
+export { FoodPlan,FoodItem};
+
+

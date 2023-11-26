@@ -35,7 +35,7 @@ app.use(express.json());
 
 app.use ("/api/user",userRouter);
 app.use("/api/foods",isAuthenticated,foodRouter)
-app.use("/api/plan",isAuthenticated,planRouter)
+app.use("/api/plans",isAuthenticated,planRouter)
 // listen
 
 app.listen(PORT,()=>console.log(`server started on the${PORT}`));
