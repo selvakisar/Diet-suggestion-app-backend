@@ -73,5 +73,3 @@ router.delete("/del/:id", async (req, res) => {
   }
 });
 export const foodRouter = router;
-
-// .send({message:"foods data successfully found"})

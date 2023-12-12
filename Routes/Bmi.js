@@ -1,49 +1,68 @@
-// import express from 'express';
-// import { BmiData } from '../models/Bmi';
 
-// const router =express.Router();
+import express from "express";
+import { Bmi } from "../models/Bmi.js";
 
-// router.get('/:userId',async(req,res)=>{
-//     try {
-//         const userId=req.params.userId;
-//         const bmiData= await BmiData.findOne({user:userId}).populate("items.bmi")
-//         if(!bmiData){
-//             return res.status(404).json({ message: 'bmi not found' });
-//         }
-//         res.json(bmiData)
-//     } catch (error) {
-//         res.status(500).json({ error: err.message });
-//     }
-// })
-
-// // router.post('/add/:productId', async (req, res) => {
-// //     try {
-// //         const loggedInUserId = req.user._id; // Get user ID from the authenticated middleware
-// //         const productId   = req.params.productId;
-// //         const Quantity = req.body.quantity;
-
-// //         const addedProduct = await Product.findById({ _id : productId});
+const router = express.Router();
 
 
-// //         if (!addedProduct) {
-// //             return res.status(404).json({ message: "Product not found" });
-// //         }
+// Get user specific BMI details
+router.get("/item/:id", async (req, res) => {
+    try {
+        const getBmi= await Bmi.find( {userId: req.params.id} )
+        if(!getBmi){
+          return res.status(400).json({ message: "bmi detail not found"})
+        }
+        res.status(200).send({ message: "Bmi detail deleted successfully", data: getBmi})
+      } catch (error) {
+        console.log(error);
+        res.status(500).send({ error: "error on  server" });
+      }
+});
 
-// //         const newItem = await CartItem.create({ product: productId, quantity: Quantity });
+//  Add BMI detail
+router.post("/add", async (req, res) => {
+  try {
+    const bmi = await new Bmi({ ...req.body }).save();
+
+    if (!bmi) {
+      return res.status(400).json({ message: "Error in adding bmi" });
+    }
+    res.status(200).send({ message: "Bmi detail added successfully", data: bmi });
+  } catch (error) {
+    // error handle
+    console.log(error);
+    res.status(500).send({ error: "error on  server" });
+  }
+});
+
+// Delete BMI detail
+router.delete("/del/:id", async (req, res) => {
+  try {
+    const deleteBmi= await Bmi.findByIdAndDelete({_id:req.params.id})
+    if(!deleteBmi){
+      return res.status(400).json({ message: "bmi detail not found"})
+    }
+    res.status(200).send({ message: "Bmi detail deleted successfully"})
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({ error: "error on  server" });
+  }
+});
+export const bmiRouter =router;
 
 
-// //         let loggedInUserCart = await Cart.findOne({ user: loggedInUserId });
 
-// //         if (!loggedInUserCart) {
-// //             loggedInUserCart = await Cart.create({ user: loggedInUserId, items: [newItem] });
-// //         } else {
-// //             loggedInUserCart.items.push(newItem);
-// //         }
 
-// //         await loggedInUserCart.save();
 
-// //         res.status(201).json({ message: "Item added to cart successfully" });
-// //     } catch (err) {
-// //         res.status(400).json({ error: err.message });
-// //     }
-// // });
+
+
+
+
+
+
+
+
+
+
+
+

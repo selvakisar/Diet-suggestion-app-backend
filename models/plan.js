@@ -14,7 +14,7 @@ const FoodItem=mongoose.model("FoodItem",FoodItemSchema)
 
 
 const FoodPlanSchema=new mongoose.Schema({
-    items:[FoodItemSchema],
+    items: {type:Array},
     user:{
         type:mongoose.Schema.Types.ObjectId,
         ref:"User",
@@ -28,5 +28,3 @@ const FoodPlan = mongoose.model("FoodPlan",FoodPlanSchema)
 
 
 export { FoodPlan,FoodItem};
-
-

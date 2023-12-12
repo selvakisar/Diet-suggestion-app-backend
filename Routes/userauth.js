@@ -76,7 +76,7 @@ const validatePassword = await bcrypt.compare(
     // genrate token
 const token = generateToken(user._id);
 
-res.status(200).send({message:"sucessfully loged in",token})
+res.status(200).send({message:"sucessfully loged in",token, userId: user._id})
 
 
 } catch (error) {
@@ -102,9 +102,7 @@ router.post("/forgetpass",async(req,res)=>{
 
         const resetToken = Math.random().toString(36).substring(2,5);
 
-        const resetLink =
-        `https://654d29dd9cf0020008b774b6--melodic-marigold-b38d5e.netlify.app/?token=${resetToken}`;
-
+        const resetLink =`https://zonezero-fit.netlify.app/?token=${resetToken}`
         user.resetToken=resetToken;
 
         const updatepassword = await User.findByIdAndUpdate(user._id,user);
@@ -147,16 +145,7 @@ router.post("/forgetpass",async(req,res)=>{
             }
         })
         
-        // const sendMail=async () =>{
-        //     const info = await transporter.sendMail({
-        //         from:"selvamern@zohomail.in",
-        //         to:user.email,
-        //         subject:"reset password",
-        //         text:resetLink
-        //     })
-        //     console.log(`Mail successfully sent${info.messageId}`)
-        // }
-        // sendMail().catch(console.error)
+
     } catch (error) {
         console.log(error);
         res.status(500).send({ error:"Internal Server Error"});
@@ -197,13 +186,3 @@ router.post("/resetpass/:token",async(req,res)=>{
 
 })
 export const userRouter= router;
-
-
-
-
-
-  
-//         const resetLink =
-//          `https://abcd.com/?token=${resetToken}`;
-        
-//    

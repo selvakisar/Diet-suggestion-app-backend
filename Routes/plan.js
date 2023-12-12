@@ -29,14 +29,12 @@ router.post("/add/:foodId",async(req,res)=>{
             return res.status(404).json({ message: "Food not found" });
         }
 
-        const newItem = await FoodItem.create({foods:foodId})
         let loggedInUserPlan= await FoodPlan.findOne({user:loggedInUserId})
 
-
         if (!loggedInUserPlan) {
-            loggedInUserPlan = await FoodPlan.create({ user: loggedInUserId, items: [newItem] });
+            loggedInUserPlan = await FoodPlan.create({ user: loggedInUserId, items: [addedFood] });
         } else {
-            loggedInUserPlan.items.push(newItem);
+            loggedInUserPlan.items.push(addedFood);
         }
 
         await loggedInUserPlan.save();
@@ -80,13 +78,11 @@ router.delete('/delete/:itemId',async (req,res)=>{
     }
 })
 
-router.get('/user/my-plan', async (req, res) => {
+router.get('/user/my-plan/:userId', async (req, res) => {
     try {
-        const loggedInUserId = req.user._id; // Get user ID from the authenticated middleware
+        const loggedInUserId = req.params.userId;
 
-        const loggedInUserPlan = await FoodPlan.findOne({ user: loggedInUserId })
-            .populate('items.product');
-
+        const loggedInUserPlan = await FoodPlan.findOne({ user: loggedInUserId });
         if (!loggedInUserPlan) {
             return res.status(404).json({ message: "User's plan not found" });
         }
@@ -100,45 +96,3 @@ router.get('/user/my-plan', async (req, res) => {
 
 
 export const planRouter =router
-// router.get("/:userId",async (req,res)=>{
-//     try {
-//         const userId = req.params.user._id
-//         const Plan
-//     } catch (error) {
-        
-//     }
-// })
-// router.post('/plan-add',async(req,res)=>{
-//     try {
-//         const {foodId,quantity}=req.body;
-//         const foods = await Foods.findById(foodId);
-//         if(!foods){
-//             return res.status(404).json({message: "foods not found"});
-//         }
-
-//         const plan=await Plan.findOne({user:req.user._id});
-
-//         if(!plan){
-//             const newPlan = new Plan({
-//                 user: req.user._id,
-//                 foodsplan:[{foods:foodId,quantity}]
-//             })
-//             await newPlan.save();
-//             return res.status(201).json(newPlan)
-//         }
-//     } catch (error) {
-//         res.status(500).json({ message: 'Internal Server Error' });
-//     }
-// })
-
-
-
-// router.get("/plan-view",async (req,res)=>{
-//     try {
-//         const plan =await Plan.findOne({user:req.user._id}).populate("foodsplan.foodplan")
-//         res.json(plan);
-//     } catch (error) {
-//         res.status(500).json({ message:"internal server error"})
-//     }
-// })
-

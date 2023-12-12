@@ -14,7 +14,7 @@ const foodSchema = new mongoose.Schema({
     required: true,
   },
   Calories: {
-    type: String,
+    type: String,         
     required: true,
   },
   Protein: {
@@ -45,16 +45,3 @@ const foodSchema = new mongoose.Schema({
 const Foods = mongoose.model("foods", foodSchema);
 
 export { Foods };
-
-// //  {
-//     "Food": "Cows' milk",
-//     "Measure": "1 qt.",
-//     "Grams": "976",
-//     "Calories": "660",
-//     "Protein": "32",
-//     "Fat": "40",
-//     "Sat.Fat": "36",
-//     "Fiber": "0",
-//     "Carbs": "48",
-//     "Category": "Dairy products"
-// //   }

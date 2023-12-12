@@ -1,4 +1,4 @@
-import express, { Router } from "express";
+import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
 import mongoose from "mongoose";
@@ -6,6 +6,8 @@ import { userRouter } from "./Routes/userauth.js";
 import { foodRouter } from "./Routes/foods.js";
 import { isAuthenticated } from "./Authentication/auth.js";
 import { planRouter } from "./Routes/plan.js";
+import { bmiRouter } from "./Routes/Bmi.js";
+
 dotenv.config();
 const {URL,PORT}=process.env
 
@@ -30,12 +32,16 @@ app.use(cors());
 
 app.use(express.json());
 
-// router
 
+// router
 
 app.use ("/api/user",userRouter);
 app.use("/api/foods",isAuthenticated,foodRouter)
-app.use("/api/plans",isAuthenticated,planRouter)
+app.use("/api/plan",isAuthenticated,planRouter)
+app.use("/api/bmi",isAuthenticated,bmiRouter)
+
+
+
 // listen
 
 app.listen(PORT,()=>console.log(`server started on the${PORT}`));
